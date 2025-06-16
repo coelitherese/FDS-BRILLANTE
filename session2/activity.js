@@ -1,4 +1,4 @@
-console.log("Item 01.")
+console.log("Item 01.");
 function addNum(addNum1 , addNum2){
     sum = addNum1 + addNum2
     console.log("The sum of " + addNum1 + " and " + addNum2 + " is: ")
@@ -10,7 +10,9 @@ function subNum(subNum1 , subNum2){
     console.log(difference);
 }
 
-console.log("Item 02.")
+
+
+console.log("Item 02.");
 function multiplyNum(multiplyNum1 , multiplyNum2){
     product = multiplyNum1 * multiplyNum2
     console.log("The product of " + multiplyNum1 + " and " + multiplyNum2 + " is: ")
@@ -22,10 +24,16 @@ function divideNum(divideNum1 , divideNum2){
     console.log(quotient);
 }
 
-console.log("Item 03.")
+
+
+console.log("Item 03.");
 function getCircleArea(radius1){
     const pi = 3.14
     circleArea = pi * radius1 ** 2
     console.log("FORMULA USED: A=πr2");
     console.log("The area of the circle is: " + circleArea);
 }
+
+
+
+console.log("Item 04.");
