@@ -58,7 +58,7 @@ console.log("6. Item Found");
 let itemFound;
 function getItemByIndex(index){
     if(grocery.length == 0 || grocery == [] || index > 0 || index >= grocery){
-        console.log("Your grocery list is empty")
+        console.log("SYSTEM: Your grocery list is empty")
     }else{
         for(let index = 0; index < grocery.length; index++){
             console.log((index + 1) + ". " + grocery[index])
