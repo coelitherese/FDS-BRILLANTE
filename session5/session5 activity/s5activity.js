@@ -7,20 +7,20 @@
 
 // console.log("Items to buy:")
 // console.log(groceryList);
-
 console.log(" ");
-console.log("4. Grocery List");
-let grocery = [];
-function groceryList(){
-    console.log("ITEMS TO BUY: ");
-    if(grocery.length == 0 || grocery == []){
+let groceryList = ["Eggs", "Bacon", "Milk", "Pancake and Waffle Mix", "Cheese"];
+function displayGroceries(){
+    console.log("GROCERY SHOPPING LIST");
+    console.log("Items to buy:");
+    if(groceryList.length == 0 || groceryList == []){
         console.log("Your grocery list is empty.");
     }else{
-        for(let index = 0; index < grocery.length; index++){
-            console.log((index + 1) + ". " + grocery[index]);
+        for(let index = 0; index < groceryList.length; index++){
+            console.log((index + 1) + ". " + groceryList[index]);
         }
     }
 }
+displayGroceries();
 
 /*
     Important note: Don't pass the array as an argument to the function.
@@ -36,19 +36,13 @@ function groceryList(){
 
 
 console.log(" ");
-console.log("5. Add Item");
 function addItem(name){
-    grocery[grocery.length] = name;
-    console.log(name + " is added to the list.");
+    groceryList[groceryList.length] = name;
+    console.log("SYSTEM: The item '" + name + "' has been added to your grocery shopping list!");
 }
-// DELETE AFTER 
-addItem("Bacon");
-addItem("Eggs");
-addItem("Milk");
-addItem("Rice");
-addItem("Pancake Mix");
+addItem("Maple Syrup");
 
-groceryList();
+displayGroceries();
 
 /*
     6. Create function which is able to receive an index number as a single argument return the item accessed by its index.
@@ -62,7 +56,7 @@ ADD CODE HERE */
 console.log(" ");
 console.log("6. Item Found");
 let itemFound;
-function getItemByIndex(index) {
+function getItemByIndex(index){
     if(grocery.length == 0 || grocery == [] || index > 0 || index >= grocery){
         console.log("Your grocery list is empty")
     }else{
