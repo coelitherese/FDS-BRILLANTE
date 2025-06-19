@@ -7,7 +7,6 @@
 
 // console.log("Items to buy:")
 // console.log(groceryList);
-console.log(" ");
 let groceryList = ["Eggs", "Bacon", "Milk", "Pancake and Waffle Mix", "Cheese"];
 function displayGroceries(){
     console.log("GROCERY SHOPPING LIST");
