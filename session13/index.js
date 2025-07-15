@@ -2,14 +2,16 @@ const express = require("express");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
+const cors = require("cors");
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(bodyParser.json());
+app.use(cors());
 
 // DB Connection Settings
 const db = mysql.createConnection({
@@ -28,7 +30,7 @@ db.connect(err => {
     }
 })
 
-// Routes / directory
+// Routes
 // Get All Task
 app.get("/tasks/all", (req, res) => {
     const sql = "SELECT * FROM tasks";
@@ -37,22 +39,21 @@ app.get("/tasks/all", (req, res) => {
         if(err){
             res.send({
                 code: 0,
-                codeMessage: "server_error",
+                codeMessage: "server-error",
                 details: "There is a problem while retrieving all tasks."
             });
             return;
         }else{
             if(result.length <= 0){
                 res.send({
-                    // create meaningful api = code, code message, details
                     code: 1,
-                    codeMessage: "no_task_found",
-                    details: "Tasks table within the database is empty."
+                    codeMessage: "no-task-found",
+                    details: "Task table in the database is empty."
                 })
             }else{
                 res.json({
                     code: 1,
-                    codeMessage: "tasks_retrieved",
+                    codeMessage: "tasks-retrieved",
                     details: result
                 });
             }
@@ -73,14 +74,14 @@ app.post("/tasks/create", (req, res) => {
         if(err){
             res.send({
                 code: 0,
-                codeMessage: "server_error",
-                details: "There is a problem while adding a task."
+                codeMessage: "server-error",
+                details: "There is a problem while adding the task."
             });
             return;
         }else{
             res.send({
                 code: 1,
-                codeMessage: "task_added",
+                codeMessage: "task-added",
                 details: `${taskName.toUpperCase()} is now added to your list.`
             });
         }
@@ -93,18 +94,18 @@ app.get("/tasks/:taskId", (req, res) => {
     const id = req.params.taskId;
     const sql = `SELECT * FROM tasks WHERE task_id = ?`;
 
-    db.query(sql,[id],(err, result) => {
+    db.query(sql, [id], (err, result) => {
         if(err || result.length <= 0){
             res.send({
                 code: 0,
-                codeMessage: "task_not_found",
-                details: "Cannot find the task wiht the provided ID"
+                codeMessage: "task-not-found",
+                details: "Cannot find the task with the provided ID."
             });
             return;
         }else{
             res.json({
                 code: 1,
-                codeMessage: "task_found",
+                codeMessage: "task-found",
                 details: result
             });
         }
@@ -121,22 +122,21 @@ app.put("/tasks/complete/:taskId", (req, res) => {
         if(err || result.length <= 0){
             res.send({
                 code: 0,
-                codeMessage: "task_not_found",
-                details: "Task cannot be updated or the task is not found"
+                codeMessage: "task-not-found",
+                details: "Task cannot be updated or the task is not found."
             });
             return;
         }else{
             res.send({
                 code: 1,
-                codeMessage: "task_completed",
-                details: "Task is now marked as complete!"
+                codeMessage: "task-completed",
+                details: "Task is now marked as complete."
             })
         }
     })
 })
 
 
-// Delete Task
 // Delete Task
 app.delete("/tasks/delete/:taskId", (req, res) => {
     const id = req.params.taskId;
@@ -209,7 +209,7 @@ app.post("/users/register", async (req, res) => {
 
         if(result.length > 0){
             res.send({
-                code: 1,
+                code: 2,
                 codeMessage: "user-already-existing",
                 details: "The email you provided was already registered."
             })
@@ -238,40 +238,42 @@ app.post("/users/register", async (req, res) => {
     })
 })
 
-// user authentication - login
-app.post("/users/login", (req,res) => {
-    const{email,pass} = req.body;
+// User Auth/Login
+
+app.post("/users/login", (req, res) => {
+    const {email, pass} = req.body;
     const sql = "SELECT * FROM users WHERE email = ?";
-    db-query(sql,email,async(err,result) => {
+
+    db.query(sql, email, async (err, result) => {
         if(err){
             res.send({
                 code: 0,
-                codeMessage: "server_error",
-                details : "There was a problem with your request. Please try again."
+                codeMessage: "server-error",
+                details: "There is a problem with your request. Please try again."
             })
         }else if(result.length <= 0){
             res.send({
-                code: 1,
-                codeMessage: "user_not_found",
-                details : "The email address provided is not register. Please use a different email or sign up"
+                code: 3,
+                codeMessage: "user-not-found",
+                details: "The email provided is not registered."
             })
         }else{
             const user = result[0];
             const isMatched = await bcrypt.compare(pass, user.pass);
+
             if(!isMatched){
                 res.send({
-                code: 1,
-                codeMessage: "error_details",
-                details : "The email or password is incorrect!"
-            })
+                code: 2,
+                codeMessage: "error-details",
+                details: "The email or password is incorrect."
+                })
             }else{
                 res.send({
                 code: 1,
-                codeMessage: "login_success",
-                details : `Welcome to UTask, ${user.fname} ${user.lname}!`
-            })
-
-            console.log(user);
+                codeMessage: "login-success",
+                details: `Welcome to UTask, ${user.fname} ${user.lname}!`,
+                user_data: result[0]
+                })
             }
         }
     })
@@ -279,5 +281,6 @@ app.post("/users/login", (req,res) => {
 
 
 
+
+
 app.listen(port, () => console.log(`Server is running at port ${port}.`));
-// if connection successful message: Server is running at port will deploy
